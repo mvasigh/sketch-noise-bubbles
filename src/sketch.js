@@ -29,7 +29,7 @@ export default (p) => {
         return this.r = 0;
       }
       let closest = p.constrain(
-        MAX_VAL - min,
+        Math.abs(MAX_VAL - min),
         0,
         MAX_VAL
       );
@@ -38,8 +38,12 @@ export default (p) => {
 
     draw() {
       p.noStroke();
-      let diff = p.constrain(this.val - TIERS[0], 0, 1 - TIERS[0]);
-      p.fill(230, 32, 83);
+      let max = 1 - TIERS[0];
+      let diff = p.constrain(this.val - TIERS[0], 0, max);
+      p.fill(
+        p.map(diff, 0, max, 230, 240),
+        p.map(diff, 0, max, 32, 240),
+        p.map(diff, 0, max, 83, 240));
       p.circle(this.x, this.y, this.r);
     }
   }
