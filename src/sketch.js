@@ -2,12 +2,12 @@ import p5 from "p5";
 
 const WIDTH = 720;
 const HEIGHT = 720;
-const NODE_OFFSET = 5;
+const NODE_OFFSET = 80;
 const NOISE_FAC = 0.007;
-const ZOFF = 0.001;
+const ZOFF = 0.0035;
 const TIERS = [0.4, 0.6, 0.8];
-const MAX_VAL = 0.04;
-const MAX_RADIUS = 8;
+const MAX_VAL = 0.05;
+const MAX_RADIUS = 65;
 
 /** @type {(p: p5) => void} */
 export default (p) => {
@@ -26,13 +26,9 @@ export default (p) => {
       this.val = p.noise(this.x * NOISE_FAC, this.y * NOISE_FAC, zoff);
       let min = Math.min(...TIERS.map((t) => Math.abs(this.val - t)));
       if (min > MAX_VAL) {
-        return this.r = 0;
+        return (this.r = 0);
       }
-      let closest = p.constrain(
-        Math.abs(MAX_VAL - min),
-        0,
-        MAX_VAL
-      );
+      let closest = p.constrain(Math.abs(MAX_VAL - min), 0, MAX_VAL);
       this.r = p.map(closest, 0, MAX_VAL, 0, MAX_RADIUS);
     }
 
@@ -43,7 +39,8 @@ export default (p) => {
       p.fill(
         p.map(diff, 0, max, 230, 240),
         p.map(diff, 0, max, 32, 240),
-        p.map(diff, 0, max, 83, 240));
+        p.map(diff, 0, max, 83, 240)
+      );
       p.circle(this.x, this.y, this.r);
     }
   }
@@ -60,7 +57,7 @@ export default (p) => {
   };
 
   p.draw = () => {
-    p.background(p.color(10, 100))
+    p.background(p.color(10, 150));
 
     for (let node of nodes) {
       node.update();
