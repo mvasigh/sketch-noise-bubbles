@@ -2,12 +2,12 @@ import p5 from "p5";
 
 const WIDTH = 720;
 const HEIGHT = 720;
-const NODE_OFFSET = 10;
-const NOISE_FAC = 0.006;
+const NODE_OFFSET = 5;
+const NOISE_FAC = 0.007;
 const ZOFF = 0.001;
-const TIERS = [0.2, 0.4, 0.6, 0.8];
-const MAX_VAL = 0.05;
-const MAX_RADIUS = 10;
+const TIERS = [0.4, 0.6, 0.8];
+const MAX_VAL = 0.04;
+const MAX_RADIUS = 8;
 
 /** @type {(p: p5) => void} */
 export default (p) => {
@@ -19,11 +19,12 @@ export default (p) => {
       this.x = x;
       this.y = y;
       this.r = null;
+      this.val = null;
     }
 
     update() {
-      let val = p.noise(this.x * NOISE_FAC, this.y * NOISE_FAC, zoff);
-      let min = Math.min(...TIERS.map((t) => Math.abs(val - t)));
+      this.val = p.noise(this.x * NOISE_FAC, this.y * NOISE_FAC, zoff);
+      let min = Math.min(...TIERS.map((t) => Math.abs(this.val - t)));
       if (min > MAX_VAL) {
         return this.r = 0;
       }
@@ -37,7 +38,8 @@ export default (p) => {
 
     draw() {
       p.noStroke();
-      p.fill(245);
+      let diff = p.constrain(this.val - TIERS[0], 0, 1 - TIERS[0]);
+      p.fill(230, 32, 83);
       p.circle(this.x, this.y, this.r);
     }
   }

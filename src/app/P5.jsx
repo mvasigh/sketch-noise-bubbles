@@ -1,5 +1,8 @@
 import { useEffect, useRef } from "preact/hooks";
 import p5 from "p5";
+
+import Controls from './Controls'
+
 import sketch from "../sketch";
 
 const WS_URL = import.meta.env.VITE_WS_URL ?? "ws://localhost:1234";
@@ -31,5 +34,10 @@ export default () => {
     };
   }, []);
 
-  return <div id="p5-sketch" ref={sketchRef} />;
+  return (
+    <Fragment>
+      <div id="p5-sketch" ref={sketchRef} />
+      <Controls />
+    </Fragment>
+  )
 };
