@@ -2,12 +2,12 @@ import p5 from "p5";
 
 const WIDTH = 720;
 const HEIGHT = 720;
-const NODE_OFFSET = 80;
-const NOISE_FAC = 0.007;
-const ZOFF = 0.0035;
+const NODE_OFFSET = 90;
+const NOISE_FAC = 0.001;
+const ZOFF = 0.005;
 const TIERS = [0.4, 0.6, 0.8];
 const MAX_VAL = 0.05;
-const MAX_RADIUS = 65;
+const MAX_RADIUS = 90;
 
 /** @type {(p: p5) => void} */
 export default (p) => {
@@ -33,13 +33,15 @@ export default (p) => {
     }
 
     draw() {
-      p.noStroke();
+      if (!this.r) { return; }
+      p.colorMode(p5.RGB);
+      p.noFill();
       let max = 1 - TIERS[0];
       let diff = p.constrain(this.val - TIERS[0], 0, max);
-      p.fill(
-        p.map(diff, 0, max, 230, 240),
-        p.map(diff, 0, max, 32, 240),
-        p.map(diff, 0, max, 83, 240)
+      p.stroke(
+        p.map(diff, 0, max, 30, 240),
+        p.map(diff, 0, max, 240, 240),
+        p.map(diff, 0, max, 80, 240)
       );
       p.circle(this.x, this.y, this.r);
     }
@@ -47,7 +49,7 @@ export default (p) => {
 
   p.setup = () => {
     p.createCanvas(WIDTH, HEIGHT);
-    p.background(10);
+    p.background(10, 50, 90);
 
     for (let x = 0; x < WIDTH + NODE_OFFSET; x += NODE_OFFSET) {
       for (let y = 0; y < HEIGHT + NODE_OFFSET; y += NODE_OFFSET) {
@@ -57,11 +59,15 @@ export default (p) => {
   };
 
   p.draw = () => {
-    p.background(p.color(10, 150));
+    if (p.frameCount % 2 === 0) {
+      p.background(10, 50, 90, 140);
+    }
 
     for (let node of nodes) {
       node.update();
-      node.draw();
+      if (p.frameCount % 2 === 0) {
+        node.draw();
+      }
     }
 
     zoff += ZOFF;
